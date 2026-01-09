@@ -26,16 +26,28 @@
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Estilos de Impressão Retrato A4 */
+        /* Estilos de Impressão / Digitalização */
         @media print {
             @page { margin: 0.8cm; size: portrait; }
-            body { background-color: white; font-size: 10px; }
-            header, .no-print, .nav-container, #connection-status { display: none !important; }
-            #app-content { width: 100% !important; display: block !important; margin: 0 !important; padding: 0 !important; }
-            .card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; break-inside: avoid; }
-            table { font-size: 8px; width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #e2e8f0 !important; padding: 4px !important; word-wrap: break-word; }
-            input, select, textarea { border: none !important; background: transparent !important; }
+            body { background-color: white !important; font-size: 10px !important; color: black !important; }
+            header, .no-print, .nav-container, #connection-status, #connection-status-container { display: none !important; }
+            #app-content { width: 100% !important; display: block !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; }
+            .card, .bg-white { box-shadow: none !important; border: 1px solid #e2e8f0 !important; break-inside: avoid; background-color: white !important; }
+            table { font-size: 9px !important; width: 100% !important; border-collapse: collapse !important; table-layout: auto !important; }
+            th, td { border: 1px solid #cbd5e1 !important; padding: 6px !important; word-wrap: break-word !important; white-space: normal !important; opacity: 1 !important; color: black !important; }
+            input, select, textarea { 
+                border: none !important; 
+                background: transparent !important; 
+                appearance: none !important; 
+                -webkit-appearance: none !important; 
+                color: black !important; 
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .month-tab-active, .month-tab-inactive { display: none !important; }
+            /* Garante que o seletor de meses não apareça no PDF de uma única página */
+            .flex-wrap.gap-2.mb-8 { display: none !important; }
         }
 
         /* Navegação Institucional */
@@ -134,7 +146,7 @@
         import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // --- CONFIGURAÇÃO FIREBASE (CONECTADO AO SEU PROJETO) ---
+        // --- CONFIGURAÇÃO FIREBASE ---
         const userProvidedConfig = {
             apiKey: "AIzaSyBsEubTpWMv4RvpNqgF-6Bx0po5HtCGYcs",
             authDomain: "calendario2026-463b1.firebaseapp.com",
@@ -273,7 +285,6 @@
                                             <th class="px-6 py-5 w-[185px]">Data / Hora</th>
                                             <th class="px-6 py-5 w-[140px]">Público</th>
                                             <th class="px-6 py-5 w-[160px]">Setor Resp.</th>
-                                            <th class="px-6 py-5 min-w-[250px]">Ocorrência / Entrega</th>
                                             <th class="px-6 py-5 w-[100px]">Meta</th>
                                             <th class="px-6 py-5 w-[110px]">Satisfação</th>
                                             <th class="px-6 py-5 w-[150px]">Status</th>
@@ -306,9 +317,6 @@
                                                     <select onchange="window.saveAct('${a.id}', 'eventSector', this.value)" class="w-full p-2 border border-slate-100 rounded-xl text-[10px] font-bold bg-white cursor-pointer">
                                                         ${SECTORS.map(o => `<option ${a.eventSector === o ? 'selected' : ''}>${o}</option>`).join('')}
                                                     </select>
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <textarea onblur="window.saveAct('${a.id}', 'postOccurrence', this.value)" class="w-full p-2 border border-slate-100 rounded-xl text-xs h-12 leading-tight resize-none" placeholder="Descrição objetiva...">${a.postOccurrence || ''}</textarea>
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <input type="number" value="${a.individualGoal || ''}" onblur="window.saveAct('${a.id}', 'individualGoal', this.value)" class="w-14 p-2 border border-slate-100 rounded-xl text-center font-bold text-slate-500" placeholder="0">
@@ -442,10 +450,10 @@
             t.innerText = msg; b.onclick = () => { cb(); window.closeModal(); }; m.classList.remove('hidden');
         };
 
-        // Database Ops (Rule 1: artifacts/appId/public/data/collection)
+        // Database Ops
         window.addAct = async () => {
             if (!auth.currentUser) return;
-            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', date: '2026-01-01', time: '09:00', eventSector: 'Comunicação', postOccurrence: '', individualGoal: 0, satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
+            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', date: '2026-01-01', time: '09:00', eventSector: 'Comunicação', individualGoal: 0, satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activities'), d);
         };
         window.saveAct = async (id, f, v) => {
@@ -521,7 +529,7 @@
             document.getElementById('initial-loader')?.classList.add('hidden');
         };
 
-        // --- INICIALIZAÇÃO (RULE 3 - Auth Before Queries) ---
+        // --- INICIALIZAÇÃO ---
         async function setup() {
             const app = initializeApp(firebaseConfig);
             auth = getAuth(app);
@@ -577,3 +585,4 @@
     </script>
 </body>
 </html>
+
