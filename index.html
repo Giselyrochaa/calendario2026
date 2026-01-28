@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -45,12 +46,10 @@
                 height: auto !important;
                 overflow: visible !important;
             }
-            .month-tab-active, .month-tab-inactive { display: none !important; }
-            /* Garante que o seletor de meses não apareça no PDF de uma única página */
+            .month-tab-active, .month-tab-inactive, button { display: none !important; }
             .flex-wrap.gap-2.mb-8 { display: none !important; }
         }
 
-        /* Navegação Institucional */
         .nav-btn-active { 
             background-color: #ffffff !important; 
             color: #1e3a8a !important; 
@@ -63,9 +62,6 @@
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
         
-        .status-badge { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 9999px; }
-
-        /* Estilo para abas de meses */
         .month-tab-active { background-color: #1e3a8a; color: white; border-color: #1e3a8a; }
         .month-tab-inactive { background-color: white; color: #64748b; border-color: #e2e8f0; }
         .month-tab-inactive:hover { background-color: #f8fafc; border-color: #cbd5e1; }
@@ -88,7 +84,7 @@
         </div>
     </div>
 
-    <!-- Header Institucional Evereste -->
+    <!-- Cabeçalho Institucional -->
     <header class="bg-blue-900 text-white shadow-xl sticky top-0 z-40 no-print flex-shrink-0">
         <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -99,7 +95,6 @@
                 </div>
             </div>
 
-            <!-- Navegação Principal -->
             <nav class="hidden lg:flex gap-1 bg-blue-800/40 p-1.5 rounded-2xl border border-blue-700/30">
                 <button onclick="window.changeView('dashboard')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="dashboard">Início</button>
                 <button onclick="window.changeView('month')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="month">Ações do Mês</button>
@@ -117,7 +112,6 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="hidden lg:hidden bg-blue-800 border-t border-blue-700 px-4 py-4 space-y-2 shadow-2xl animate-fadeIn">
             <button onclick="window.changeView('dashboard'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase tracking-widest border-b border-blue-700/50">Dashboard</button>
             <button onclick="window.changeView('month'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase tracking-widest border-b border-blue-700/50">Ações do Mês</button>
@@ -127,7 +121,6 @@
         </div>
     </header>
 
-    <!-- Área de Conteúdo -->
     <main id="app-content" class="flex-1 overflow-y-auto max-w-7xl mx-auto w-full px-4 py-8 custom-scrollbar">
         <div id="initial-loader" class="flex flex-col items-center justify-center py-40 text-slate-400">
             <div class="animate-spin rounded-full h-14 w-14 border-b-2 border-blue-900 mb-6"></div>
@@ -135,15 +128,13 @@
         </div>
     </main>
 
-    <!-- Footer Impressão -->
     <footer class="hidden print:block text-center text-[9px] text-gray-400 mt-10 border-t pt-4">
         Documento Oficial Instituto Evereste - Gerado em <span id="print-date"></span>
     </footer>
 
-    <!-- Scripts do Sistema -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- CONFIGURAÇÃO FIREBASE ---
@@ -167,6 +158,7 @@
             crises: [],
             notifications: [],
             monthlyReports: {},
+            crisisReports: {},
             holidays: []
         };
 
@@ -185,14 +177,12 @@
             { id: 11, name: 'Dezembro', color: 'border-l-8 border-red-700' }
         ];
 
-        const TYPES = ['TI', 'Evento Interno', 'Evento Externo', 'Campanha', 'Treinamento', 'Gravação Externa', 'Palestra'];
+        const TYPES = ['Campanha', 'TI', 'Evento Interno', 'Evento Externo', 'Treinamento', 'Gravação Externa', 'Palestra'];
         const SECTORS = ['Comunicação', 'Diretoria', 'Administrativo', 'RH', 'Infraestrutura', 'TI', 'Visitante'];
-        const STATUS = ['Planejado', 'Em Execução', 'Concluído', 'Realizado', 'Não Realizado'];
+        const STATUS = ['Realizado', 'Planejado', 'Em Execução', 'Concluído', 'Não Realizado'];
         const AUDIENCES = ['Interno', 'Externo', 'Parceria', 'Visitante', 'Colaborador'];
 
         let db, auth;
-
-        // --- COMPONENTES UI ---
 
         const monthSelectorUI = () => `
             <div class="no-print flex flex-wrap gap-2 mb-8 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
@@ -203,8 +193,6 @@
                 `).join('')}
             </div>
         `;
-
-        // --- DEFINIÇÕES DE TEMPLATE ---
 
         window.templates = {
             dashboard: () => {
@@ -304,7 +292,7 @@
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <div class="flex flex-col gap-1">
-                                                        <input type="date" value="${a.date || ''}" min="2026-01-01" max="2026-12-31" onchange="window.saveAct('${a.id}', 'date', this.value)" class="p-1.5 border border-slate-100 rounded-lg text-xs font-black">
+                                                        <input type="date" value="${a.date || ''}" onchange="window.saveAct('${a.id}', 'date', this.value)" class="p-1.5 border border-slate-100 rounded-lg text-xs font-black">
                                                         <input type="time" value="${a.time || ''}" onchange="window.saveAct('${a.id}', 'time', this.value)" class="p-1.5 border border-slate-100 rounded-lg text-xs font-black">
                                                     </div>
                                                 </td>
@@ -348,7 +336,9 @@
                     <div class="space-y-6 animate-fadeIn">
                         <div class="flex justify-between items-center bg-white p-6 rounded-3xl border shadow-sm">
                             <div><h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter">Vista Consolidada 2026</h2><p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Cronograma Anual de Eventos</p></div>
-                            <button onclick="window.exportPDF()" class="no-print bg-slate-900 text-white px-6 py-3 rounded-2xl text-[10px] font-black tracking-widest uppercase">Gerar PDF Anual</button>
+                            <button onclick="window.exportPDF()" class="no-print bg-slate-900 text-white px-6 py-3 rounded-2xl text-[10px] font-black tracking-widest uppercase flex items-center gap-2">
+                                <i data-lucide="printer" size="16"></i> IMPRIMIR CALENDÁRIO
+                            </button>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             ${MONTHS_DATA.map(m => {
@@ -373,14 +363,35 @@
                     </div>`;
             },
             crisis: () => {
+                const m = MONTHS_DATA[window.state.selectedMonth];
+                const cReport = window.state.crisisReports[m.id] || { text: '' };
+
                 return `
                     <div class="space-y-8 animate-fadeIn">
+                        ${monthSelectorUI()}
+
                         <div class="bg-red-800 text-white p-8 rounded-[2rem] shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 no-print">
                             <div><h2 class="text-2xl font-black uppercase tracking-tighter">Riscos & Crises</h2><p class="text-red-200 text-[10px] font-black uppercase tracking-[0.3em] mt-2">Monitoramento Preventivo Evereste</p></div>
-                            <button onclick="window.addCrisis()" class="bg-white text-red-800 px-8 py-4 rounded-2xl font-black uppercase text-xs shadow-xl active:scale-95 transition">REGISTAR NOVO ALERTA</button>
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="window.exportPDF()" class="bg-red-950 text-white px-5 py-4 rounded-2xl font-black uppercase text-[10px] shadow-lg transition hover:scale-95 flex items-center gap-2">
+                                    <i data-lucide="printer" size="14"></i> IMPRIMIR PDF
+                                </button>
+                                <button onclick="window.autoGenCrisisRep()" class="bg-red-700 hover:bg-red-600 text-white px-5 py-4 rounded-2xl font-black uppercase text-[10px] shadow-lg transition">GERAR RELATÓRIO AUTO</button>
+                                <button onclick="window.addCrisis()" class="bg-white text-red-800 px-6 py-4 rounded-2xl font-black uppercase text-[10px] shadow-xl active:scale-95 transition">ADICIONAR ALERTA</button>
+                            </div>
                         </div>
+
+                        <!-- Relatório Estratégico -->
+                        <div class="bg-white rounded-[2rem] border border-red-100 shadow-sm p-8 print-break-inside-avoid">
+                            <h3 class="text-sm font-black text-red-800 mb-6 uppercase tracking-widest flex items-center gap-2"><i data-lucide="file-text"></i> Resumo Executivo de Crises - ${m.name} 2026</h3>
+                            <textarea onblur="window.saveCrisisRep('${m.id}', this.value)" class="w-full bg-red-50/30 border-none rounded-2xl p-6 text-sm h-32 leading-relaxed text-slate-700 font-medium focus:ring-2 focus:ring-red-100 transition resize-none" placeholder="Relatório automático ou notas estratégicas...">${cReport.text || ''}</textarea>
+                        </div>
+
                         <div class="grid gap-6">
-                            ${window.state.crises.map(c => `
+                            ${window.state.crises.filter(c => {
+                                const cDate = new Date(c.date);
+                                return cDate.getMonth() === m.id;
+                            }).map(c => `
                                 <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 relative print-break-inside-avoid">
                                     <button onclick="window.delCrisisReq('${c.id}')" class="absolute top-8 right-8 text-slate-200 hover:text-red-600 transition no-print"><i data-lucide="trash-2" size="20"></i></button>
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-slate-50 pb-8">
@@ -391,11 +402,11 @@
                                         <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Setor Responsável</label><select onchange="window.saveCrisis('${c.id}', 'sector', this.value)" class="w-full border-none bg-slate-50 rounded-xl p-3 text-xs font-black uppercase">
                                             ${SECTORS.map(s => `<option ${c.sector === s ? 'selected' : ''}>${s}</option>`).join('')}
                                         </select></div>
-                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Registado por</label><input type="text" value="Vera Nascimento" readonly class="w-full border-none bg-slate-100/50 rounded-xl p-3 text-xs font-bold text-slate-400 cursor-not-allowed"></div>
+                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Registado por</label><input type="text" value="Gisely Rocha" readonly class="w-full border-none bg-slate-100/50 rounded-xl p-3 text-xs font-bold text-slate-400 cursor-not-allowed"></div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div class="p-6 bg-red-50/50 rounded-3xl border border-red-100/50"><label class="block text-[10px] font-black text-red-800 uppercase tracking-widest mb-4">Plano de Acção e Ocorrência</label><textarea onblur="window.saveCrisis('${c.id}', 'correctiveAction', this.value)" class="w-full bg-white border-none rounded-2xl p-4 text-sm h-32 shadow-inner resize-none font-medium text-slate-700 leading-relaxed" placeholder="Detalhes do ocorrido e ações imediatas...">${c.correctiveAction || ''}</textarea></div>
-                                        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100"><label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Notas de Melhoria</label><textarea onblur="window.saveCrisis('${c.id}', 'learning', this.value)" class="w-full bg-transparent border-none text-sm h-32 font-medium text-slate-600 resize-none leading-relaxed" placeholder="O que aprendemos com esta situação?">${c.learning || ''}</textarea></div>
+                                        <div class="p-6 bg-red-50/50 rounded-3xl border border-red-100/50"><label class="block text-[10px] font-black text-red-800 uppercase tracking-widest mb-4">Plano de Acção e Ocorrência</label><textarea onblur="window.saveCrisis('${c.id}', 'correctiveAction', this.value)" class="w-full bg-white border-none rounded-2xl p-4 text-sm h-32 shadow-inner resize-none font-medium text-slate-700 leading-relaxed" placeholder="Detalhes do ocorrido...">${c.correctiveAction || ''}</textarea></div>
+                                        <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100"><label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Notas de Melhoria</label><textarea onblur="window.saveCrisis('${c.id}', 'learning', this.value)" class="w-full bg-transparent border-none text-sm h-32 font-medium text-slate-600 resize-none leading-relaxed" placeholder="O que aprendemos?">${c.learning || ''}</textarea></div>
                                     </div>
                                 </div>`).join('')}
                         </div>
@@ -438,7 +449,7 @@
             }
         };
 
-        // --- LÓGICA DE INTERAÇÃO GLOBAL ---
+        // --- LÓGICA GLOBAL ---
 
         window.changeView = (v) => { window.state.view = v; window.renderApp(); };
         window.changeMonth = (m) => { window.state.selectedMonth = m; window.renderApp(); };
@@ -453,7 +464,7 @@
         // Database Ops
         window.addAct = async () => {
             if (!auth.currentUser) return;
-            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', date: '2026-01-01', time: '09:00', eventSector: 'Comunicação', individualGoal: 0, satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
+            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', date: '2026-' + (window.state.selectedMonth + 1).toString().padStart(2, '0') + '-01', time: '09:00', eventSector: 'Comunicação', individualGoal: 0, satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activities'), d);
         };
         window.saveAct = async (id, f, v) => {
@@ -467,7 +478,7 @@
 
         window.addCrisis = async () => {
             if (!auth.currentUser) return;
-            const d = { date: new Date().toISOString().split('T')[0], riskLevel: 'Moderada', sector: 'Comunicação', responsible: 'Vera Nascimento', correctiveAction: '', learning: '', createdAt: new Date().toISOString() };
+            const d = { date: '2026-' + (window.state.selectedMonth + 1).toString().padStart(2, '0') + '-01', riskLevel: 'Moderada', sector: 'Comunicação', responsible: 'Gisely Rocha', correctiveAction: '', learning: '', createdAt: new Date().toISOString() };
             await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'crises'), d);
         };
         window.saveCrisis = async (id, f, v) => {
@@ -478,6 +489,26 @@
             if (!auth.currentUser) return;
             deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'crises', id));
         });
+
+        window.saveCrisisRep = async (mId, text) => {
+            if (!auth.currentUser) return;
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'crisisReports', mId), { text }, { merge: true });
+        };
+
+        window.autoGenCrisisRep = () => {
+            const m = MONTHS_DATA[window.state.selectedMonth];
+            const crises = window.state.crises.filter(c => new Date(c.date).getMonth() === m.id);
+            const total = crises.length;
+            const graves = crises.filter(c => c.riskLevel === 'Grave' || c.riskLevel === 'Reputacional Extrema').length;
+            
+            let txt = `Relatório de Riscos - ${m.name} 2026\n\nIdentificámos um total de ${total} alertas de crise. `;
+            if (total > 0) {
+                txt += `Destes, ${graves} foram classificados como críticos. A gestão liderada por Gisely Rocha implementou planos de contingência. A monitorização preventiva continua ativa.`;
+            } else {
+                txt += `Não foram registados riscos críticos durante este período. O ambiente institucional permanece estável.`;
+            }
+            window.saveCrisisRep(m.id.toString(), txt);
+        };
 
         window.sendNotif = async () => {
             if (!auth.currentUser) return;
@@ -506,30 +537,24 @@
         window.autoGenRep = () => {
             const acts = window.state.activities.filter(a => parseInt(a.month) === window.state.selectedMonth);
             const done = acts.filter(a => a.status === 'Concluído' || a.status === 'Realizado').length;
-            const txt = `Durante o período de ${MONTHS_DATA[window.state.selectedMonth].name} de 2026, o Setor de Comunicação do Instituto Evereste executou ${acts.length} ações coordenadas. Obtivemos a conclusão bem-sucedida de ${done} metas, com uma taxa de eficiência de ${acts.length > 0 ? Math.round((done/acts.length)*100) : 0}%. O fluxo institucional mantém-se estável e alinhado com o plano de gestão anual.`;
+            const txt = `Durante o período de ${MONTHS_DATA[window.state.selectedMonth].name} de 2026, executámos ${acts.length} ações. Concluímos ${done} metas com eficiência de ${acts.length > 0 ? Math.round((done/acts.length)*100) : 0}%.`;
             window.saveRep(window.state.selectedMonth, 'explanation', txt);
-            window.renderApp();
         };
 
         window.exportPDF = () => setTimeout(() => window.print(), 100);
         
-        // --- MOTOR DE RENDERIZAÇÃO ---
         window.renderApp = () => {
             const content = document.getElementById('app-content');
             if(!content) return;
-
-            // Nav Sync
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.className = `nav-btn px-5 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all ${btn.dataset.view === window.state.view ? 'nav-btn-active' : 'nav-btn-inactive'}`;
             });
-
             const template = window.templates[window.state.view];
             if(template) content.innerHTML = template();
             lucide.createIcons();
             document.getElementById('initial-loader')?.classList.add('hidden');
         };
 
-        // --- INICIALIZAÇÃO ---
         async function setup() {
             const app = initializeApp(firebaseConfig);
             auth = getAuth(app);
@@ -545,38 +570,61 @@
                 }
             } catch (e) { console.warn("Firebase Auth Fallback", e); }
 
-            onAuthStateChanged(auth, (u) => {
+            onAuthStateChanged(auth, async (u) => {
                 if (u) {
                     document.getElementById('conn-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
                     document.getElementById('conn-text').innerText = "CONECTADO";
                     
-                    // Listeners Real-time
+                    // --- AUTO-POPULAÇÃO DADOS JANEIRO BRANCO ---
+                    const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'activities'), where('eventName', '==', 'Janeiro Branco - CGA-2026'));
+                    const snap = await getDocs(q);
+                    if (snap.empty) {
+                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activities'), {
+                            month: 0, 
+                            type: 'Campanha',
+                            eventName: 'Janeiro Branco - CGA-2026',
+                            audience: 'Interno',
+                            date: '2026-01-27',
+                            time: '08:30',
+                            eventSector: 'Comunicação',
+                            individualGoal: 41, 
+                            satisfaction: 98, 
+                            status: 'Realizado',
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activities'), s => { 
                         window.state.activities = s.docs.map(d => ({id: d.id, ...d.data()})); 
                         window.renderApp(); 
-                    }, (err) => console.error("Error activities:", err));
+                    });
 
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'crises'), s => { 
                         window.state.crises = s.docs.map(d => ({id: d.id, ...d.data()})); 
                         window.renderApp(); 
-                    }, (err) => console.error("Error crises:", err));
+                    });
 
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'notifications'), s => { 
                         window.state.notifications = s.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)); 
                         window.renderApp(); 
-                    }, (err) => console.error("Error notifications:", err));
+                    });
 
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'holidays'), s => { 
                         window.state.holidays = s.docs.map(d => ({id: d.id, ...d.data()})); 
                         window.renderApp(); 
-                    }, (err) => console.error("Error holidays:", err));
+                    });
 
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'reports'), s => { 
-                        const r = {}; 
-                        s.docs.forEach(d => r[d.id] = d.data()); 
+                        const r = {}; s.docs.forEach(d => r[d.id] = d.data()); 
                         window.state.monthlyReports = r; 
                         window.renderApp(); 
-                    }, (err) => console.error("Error reports:", err));
+                    });
+
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'crisisReports'), s => { 
+                        const r = {}; s.docs.forEach(d => r[d.id] = d.data()); 
+                        window.state.crisisReports = r; 
+                        window.renderApp(); 
+                    });
                 }
             });
         }
@@ -585,4 +633,3 @@
     </script>
 </body>
 </html>
-
