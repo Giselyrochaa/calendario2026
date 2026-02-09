@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -42,7 +41,6 @@
             html, body { height: auto !important; overflow: visible !important; }
         }
 
-        /* Navegação Institucional */
         .nav-btn-active { 
             background-color: #ffffff !important; 
             color: #1e3a8a !important; 
@@ -65,10 +63,10 @@
                 <i data-lucide="alert-circle" size="24"></i>
                 <h3 class="text-lg font-extrabold tracking-tight">Confirmar</h3>
             </div>
-            <p id="modal-message" class="text-slate-600 mb-8 text-sm leading-relaxed">Deseja prosseguir com esta ação?</p>
+            <p id="modal-message" class="text-slate-600 mb-8 text-sm leading-relaxed">Deseja prosseguir com esta exclusão?</p>
             <div class="flex justify-end gap-3">
                 <button onclick="window.closeModal()" class="px-4 py-2 text-slate-500 hover:bg-slate-100 rounded-xl text-sm font-bold transition">Cancelar</button>
-                <button id="modal-confirm-btn" class="px-6 py-2 bg-red-600 text-white hover:bg-red-700 rounded-xl shadow-lg text-sm font-black transition">Confirmar</button>
+                <button id="modal-confirm-btn" class="px-6 py-2 bg-red-600 text-white hover:bg-red-700 rounded-xl shadow-lg text-sm font-black transition uppercase">Apagar</button>
             </div>
         </div>
     </div>
@@ -84,13 +82,11 @@
                 </div>
             </div>
 
-            <!-- Navegação Principal -->
             <nav class="hidden lg:flex gap-1 bg-blue-800/40 p-1.5 rounded-2xl border border-blue-700/30">
                 <button onclick="window.changeView('dashboard')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="dashboard">Dashboard</button>
                 <button onclick="window.changeView('month')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="month">Ações</button>
                 <button onclick="window.changeView('calendar')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="calendar">Calendário</button>
                 <button onclick="window.changeView('reports')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="reports">Relatórios</button>
-                <button onclick="window.changeView('crisis')" class="nav-btn px-5 py-2.5 rounded-xl text-[11px] font-bold uppercase transition-all" data-view="crisis">Riscos</button>
             </nav>
 
             <div class="flex items-center gap-4">
@@ -100,15 +96,6 @@
                 </div>
                 <button class="lg:hidden p-2 text-white bg-blue-800 rounded-xl" onclick="window.toggleMobileMenu()"><i data-lucide="menu"></i></button>
             </div>
-        </div>
-
-        <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-blue-800 border-t border-blue-700 px-4 py-4 space-y-2 shadow-2xl animate-fadeIn">
-            <button onclick="window.changeView('dashboard'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase border-b border-blue-700/50">Dashboard</button>
-            <button onclick="window.changeView('month'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase border-b border-blue-700/50">Ações do Mês</button>
-            <button onclick="window.changeView('calendar'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase border-b border-blue-700/50">Calendário</button>
-            <button onclick="window.changeView('reports'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase border-b border-blue-700/50">Relatórios</button>
-            <button onclick="window.changeView('crisis'); window.toggleMobileMenu()" class="block w-full text-left py-4 px-5 text-white font-black text-xs uppercase">Riscos</button>
         </div>
     </header>
 
@@ -128,25 +115,25 @@
         // --- CONSTANTES GLOBAIS ---
         window.MONTHS_DATA = [
             { id: 0, name: 'Janeiro', color: 'border-l-8 border-slate-300' },
-            { id: 1, name: 'Fevereiro', color: 'border-l-8 border-purple-500' },
+            { id: 1, name: 'Fevereiro', color: 'border-l-8 border-orange-500' },
             { id: 2, name: 'Março', color: 'border-l-8 border-pink-500' },
             { id: 3, name: 'Abril', color: 'border-l-8 border-sky-500' },
             { id: 4, name: 'Maio', color: 'border-l-8 border-yellow-500' },
             { id: 5, name: 'Junho', color: 'border-l-8 border-red-500' },
             { id: 6, name: 'Julho', color: 'border-l-8 border-amber-500' },
-            { id: 7, name: 'Agosto', color: 'border-l-8 border-orange-500' },
+            { id: 7, name: 'Agosto', color: 'border-l-8 border-purple-500' },
             { id: 8, name: 'Setembro', color: 'border-l-8 border-emerald-500' },
             { id: 9, name: 'Outubro', color: 'border-l-8 border-rose-500' },
             { id: 10, name: 'Novembro', color: 'border-l-8 border-indigo-600' },
             { id: 11, name: 'Dezembro', color: 'border-l-8 border-red-700' }
         ];
 
-        window.TYPES = ['Evento Interno', 'Evento Externo', 'Palestra', 'Campanha', 'Treinamento', 'TI'];
-        window.STATUS = ['Planejado', 'Em Execução', 'Concluído', 'Realizado', 'Não Realizado'];
-        window.AUDIENCES = ['Interno', 'Externo', 'Parceria', 'Visitante', 'Colaborador'];
-        window.SECTORS = ['Comunicação', 'Diretoria', 'Administrativo', 'RH', 'Infraestrutura', 'TI', 'CGA'];
+        window.TYPES = ['Evento Interno', 'Evento Externo', 'Palestra', 'Campanha', 'Treinamento', 'Gravação', 'Websérie', 'Oficina', 'Gravações'];
+        window.STATUS = ['Planejado', 'Em Execução', 'Concluído', 'Não Realizado'];
+        window.AUDIENCES = ['Interno', 'Externo', 'Parceria', 'Visitante', 'Colaborador', 'Comunidade'];
+        window.SECTORS = ['Comunicação', 'Diretoria', 'Administrativo', 'RH', 'Infraestrutura', 'TI', 'CGA', 'CCSRI', 'Socioambiental', 'Ética', 'Endomarketing'];
+        window.FEEDBACK_CATEGORIES = ['Crítica', 'Moderado', 'Alto Risco', 'Sem Relevância'];
 
-        // --- CONFIGURAÇÃO FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyBsEubTpWMv4RvpNqgF-6Bx0po5HtCGYcs",
             authDomain: "calendario2026-463b1.firebaseapp.com",
@@ -157,13 +144,12 @@
             measurementId: "G-YZED14D5EX"
         };
         
-        const appId = 'evereste-2026-cga-v8';
+        const appId = 'evereste-2026-cga-v11';
 
         window.state = {
             view: 'dashboard',
             selectedMonth: new Date().getMonth(),
             activities: [],
-            crises: [],
             notifications: [],
             monthlyReports: {},
             holidays: []
@@ -172,10 +158,35 @@
         window.db = null;
         window.auth = null;
 
-        // --- COMPONENTE PERSISTENTE: INDICADORES ESTRATÉGICOS ---
+        // --- FUNÇÕES DE RENDERIZAÇÃO E LÓGICA ---
+
+        window.renderApp = () => {
+            const content = document.getElementById('app-content');
+            if(!content) return;
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const isActive = btn.dataset.view === window.state.view;
+                btn.className = `nav-btn px-5 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all ${isActive ? 'nav-btn-active' : 'nav-btn-inactive'}`;
+            });
+
+            let mSelector = '';
+            if (['month', 'reports'].includes(window.state.view)) {
+                mSelector = `<div class="mb-6 overflow-x-auto pb-2 no-print custom-scrollbar"><div class="flex gap-2 min-w-max">${window.MONTHS_DATA.map(m => `<button onclick="window.changeMonth(${m.id})" class="px-4 py-2 rounded-full text-[10px] font-black border transition-all ${window.state.selectedMonth === m.id ? 'bg-blue-900 text-white border-blue-900 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'} uppercase tracking-tight">${m.name}</button>`).join('')}</div></div>`;
+            }
+
+            const currentViewFn = window.templates[window.state.view];
+            if (currentViewFn) {
+                content.innerHTML = mSelector + currentViewFn();
+            }
+            
+            lucide.createIcons();
+            document.getElementById('initial-loader')?.classList.add('hidden');
+        };
+
         window.getStrategicIndicatorsHTML = () => {
             const acts = window.state.activities;
-            const completed = acts.filter(a => a.status === 'Concluído' || a.status === 'Realizado').length;
+            const completed = acts.filter(a => a.status === 'Concluído').length;
+            const expected = acts.length;
             const rated = acts.filter(a => a.satisfaction && !isNaN(a.satisfaction));
             const avg = rated.length ? Math.round(rated.reduce((acc, c) => acc + parseFloat(c.satisfaction), 0) / rated.length) : 0;
             const totalPublic = acts.reduce((acc, c) => acc + (parseInt(c.publicCount) || 0), 0);
@@ -189,56 +200,74 @@
                         </button>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-8 border-l-blue-600">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Satisfação Geral</p>
-                            <h3 class="text-3xl font-black text-blue-700 leading-none">${avg}%</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-4 border-l-blue-600">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Satisfação</p>
+                            <h3 class="text-2xl font-black text-blue-700 leading-none">${avg}%</h3>
                         </div>
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-8 border-l-green-500">
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-4 border-l-green-500">
                             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Público Total</p>
-                            <h3 class="text-3xl font-black text-green-600 leading-none">${totalPublic}</h3>
+                            <h3 class="text-2xl font-black text-green-600 leading-none">${totalPublic}</h3>
                         </div>
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-8 border-l-slate-800">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Taxa de Execução</p>
-                            <h3 class="text-3xl font-black text-slate-800 leading-none">${acts.length ? Math.round((completed/acts.length)*100) : 0}%</h3>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-4 border-l-indigo-600">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Meta Esperada</p>
+                            <h3 class="text-2xl font-black text-indigo-600 leading-none">${expected}</h3>
                         </div>
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-8 border-l-red-600">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Riscos Ativos</p>
-                            <h3 class="text-3xl font-black text-red-600 leading-none">${window.state.crises.length}</h3>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-4 border-l-emerald-600">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Meta Atingida</p>
+                            <h3 class="text-2xl font-black text-emerald-600 leading-none">${completed}</h3>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 border-l-4 border-l-slate-800">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Taxa Exec.</p>
+                            <h3 class="text-2xl font-black text-slate-800 leading-none">${acts.length ? Math.round((completed/acts.length)*100) : 0}%</h3>
                         </div>
                     </div>
                 </div>
             `;
         };
 
-        // --- TEMPLATES DAS ABAS ---
-
+        // --- TEMPLATES ---
         window.templates = {
             dashboard: () => {
                 const acts = window.state.activities;
-                const top = [...acts].filter(a => a.satisfaction).sort((a,b) => b.satisfaction - a.satisfaction).slice(0,5);
+                const top = [...acts]
+                    .filter(a => a.satisfaction && a.status === 'Concluído')
+                    .sort((a,b) => b.satisfaction - a.satisfaction)
+                    .slice(0,5);
 
                 return `
                     ${window.getStrategicIndicatorsHTML()}
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
                         <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                            <h3 class="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest flex items-center gap-2"><i data-lucide="award" class="text-yellow-500"></i> Eventos Destaque</h3>
+                            <h3 class="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest flex items-center gap-2"><i data-lucide="award" class="text-yellow-500"></i> Eventos em Destaque (Sync Auto)</h3>
                             <div class="space-y-4">
                                 ${top.map(t => `<div class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div class="truncate pr-4"><p class="text-xs font-black text-slate-800 truncate">${t.eventName || 'S/ Nome'}</p><p class="text-[9px] text-slate-400 font-bold uppercase">${t.type}</p></div>
+                                    <div class="truncate pr-4">
+                                        <p class="text-xs font-black text-slate-800 truncate uppercase">${t.eventName || 'S/ Nome'}</p>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase">${t.type}</p>
+                                    </div>
                                     <span class="text-sm font-black text-emerald-600">${t.satisfaction}%</span>
-                                </div>`).join('') || '<p class="text-center py-10 text-slate-300 italic text-sm">A carregar...</p>'}
+                                </div>`).join('') || '<p class="text-center py-10 text-slate-300 italic text-sm">A aguardar sincronização...</p>'}
                             </div>
                         </div>
                         <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                            <h3 class="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest flex items-center gap-2"><i data-lucide="bell" class="text-blue-600"></i> Mural Unificado</h3>
-                            <div class="flex gap-2 mb-6 no-print">
-                                <input type="text" id="notif-input" placeholder="Novo aviso..." class="flex-1 bg-slate-50 border-none p-3 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500">
-                                <button onclick="window.sendNotif()" class="bg-blue-900 text-white px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest">Postar</button>
+                            <h3 class="text-sm font-black text-slate-800 mb-6 uppercase tracking-widest flex items-center gap-2"><i data-lucide="bell" class="text-blue-600"></i> Mural Unificado de Feedback</h3>
+                            <div class="flex flex-col gap-2 mb-6 no-print">
+                                <input type="text" id="notif-input" placeholder="Novo relato..." class="bg-slate-50 border-none p-3 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500">
+                                <div class="flex gap-2">
+                                    <select id="notif-cat" class="flex-1 bg-slate-50 border-none p-2 rounded-xl text-[10px] font-black uppercase">
+                                        ${window.FEEDBACK_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                    </select>
+                                    <button onclick="window.sendNotif()" class="bg-blue-900 text-white px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">Postar</button>
+                                </div>
                             </div>
                             <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
                                 ${window.state.notifications.map(n => `<div class="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-xl flex justify-between group">
-                                    <div><p class="text-xs text-blue-900 font-medium leading-relaxed">${n.text}</p><span class="text-[8px] text-blue-400 font-black uppercase mt-2 block">${new Date(n.timestamp).toLocaleString()}</span></div>
+                                    <div class="flex-1">
+                                        <span class="text-[8px] font-black uppercase bg-blue-100 px-2 py-0.5 rounded-full text-blue-800 mb-1 inline-block">${n.category || 'Feedback'}</span>
+                                        <p class="text-xs text-blue-900 font-medium leading-relaxed">${n.text}</p>
+                                        <span class="text-[8px] text-blue-400 font-black uppercase mt-1 block">${new Date(n.timestamp).toLocaleString()}</span>
+                                    </div>
                                     <button onclick="window.delNotif('${n.id}')" class="text-red-300 opacity-0 group-hover:opacity-100 hover:text-red-600 transition no-print"><i data-lucide="trash-2" size="14"></i></button>
                                 </div>`).join('') || '<p class="text-center py-10 text-slate-300 italic text-sm">Sem avisos.</p>'}
                             </div>
@@ -253,44 +282,43 @@
                     <div class="space-y-6 animate-fadeIn">
                         <div class="bg-white p-8 rounded-3xl shadow-sm border ${m.color}">
                             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                                <div><h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter">${m.name} 2026</h2><p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">Gestão de Cronograma</p></div>
-                                <div class="flex gap-3 no-print">
-                                    <button onclick="window.addAct()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase transition shadow-xl flex items-center gap-2"><i data-lucide="plus" size="16"></i> ADICIONAR AÇÃO</button>
-                                </div>
+                                <div><h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter">${m.name} 2026</h2><p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Controlo de Atividades e Gravações</p></div>
+                                <button onclick="window.addAct()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase transition shadow-xl flex items-center gap-2"><i data-lucide="plus" size="16"></i> ADICIONAR AÇÃO</button>
                             </div>
                         </div>
-
-                        <div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
+                        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                             <div class="overflow-x-auto custom-scrollbar">
                                 <table class="w-full text-left text-sm whitespace-nowrap">
-                                    <thead class="bg-slate-50/80 text-slate-400 font-black uppercase text-[8px] tracking-[0.15em] border-b">
+                                    <thead class="bg-slate-50/80 text-slate-400 font-black uppercase text-[8px] border-b">
                                         <tr>
-                                            <th class="px-6 py-5 w-[160px]">Tipo</th>
-                                            <th class="px-6 py-5 min-w-[200px]">Nome do Evento</th>
-                                            <th class="px-6 py-5 w-[185px]">Data / Hora</th>
-                                            <th class="px-6 py-5 w-[130px]">Público</th>
-                                            <th class="px-6 py-5 w-[80px]">Pres.</th>
-                                            <th class="px-6 py-5 w-[140px]">Setor Resp.</th>
-                                            <th class="px-6 py-5 min-w-[250px]">Palestras e Ações</th>
-                                            <th class="px-6 py-5 w-[90px]">Satisf.</th>
-                                            <th class="px-6 py-5 w-[130px]">Status</th>
-                                            <th class="px-6 py-5 w-12 no-print"></th>
+                                            <th class="px-5 py-5 w-[140px]">Tipo</th>
+                                            <th class="px-5 py-5 min-w-[200px]">Nome do Evento / Tipo</th>
+                                            <th class="px-5 py-5 w-[170px]">Data / Hora</th>
+                                            <th class="px-5 py-5 w-[120px]">Público</th>
+                                            <th class="px-5 py-5 w-[80px]">Pres.</th>
+                                            <th class="px-5 py-5 w-[140px]">Setor Resp.</th>
+                                            <th class="px-5 py-5 min-w-[250px]">Palestras e Ações</th>
+                                            <th class="px-5 py-5 w-[90px]">Satisf.</th>
+                                            <th class="px-5 py-5 w-[130px]">Status</th>
+                                            <th class="px-5 py-5 w-10 no-print"></th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-slate-50">
-                                        ${acts.map(a => `
-                                            <tr class="hover:bg-slate-50 transition-colors">
-                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'type', this.value)" class="w-full p-2 border border-slate-100 rounded-xl text-[10px] font-black uppercase bg-white">${window.TYPES.map(o => `<option ${a.type === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
-                                                <td class="px-6 py-4 font-bold text-slate-800"><input type="text" value="${a.eventName || ''}" onblur="window.saveAct('${a.id}', 'eventName', this.value)" class="w-full p-2 border rounded-xl text-xs font-bold" placeholder="Nome..."></td>
+                                        ${acts.map(a => {
+                                            const isLecture = a.type === 'Palestra';
+                                            return `
+                                            <tr class="hover:bg-blue-50/20 transition-colors">
+                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'type', this.value)" class="w-full p-2 border rounded-xl text-[9px] font-black uppercase bg-white cursor-pointer">${window.TYPES.map(o => `<option ${a.type === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
+                                                <td class="px-6 py-4 font-bold text-slate-800"><input type="text" value="${a.eventName || ''}" onblur="window.saveAct('${a.id}', 'eventName', this.value)" class="w-full p-2 border rounded-xl text-xs font-bold" placeholder="${isLecture ? 'Nome do Evento' : 'Tipo de Evento'}"></td>
                                                 <td class="px-6 py-4"><div class="flex flex-col gap-1"><input type="date" value="${a.date || ''}" onchange="window.saveAct('${a.id}', 'date', this.value)" class="p-1 border rounded text-[10px] font-black w-[125px]"><input type="time" value="${a.time || ''}" onchange="window.saveAct('${a.id}', 'time', this.value)" class="p-1 border rounded text-[10px] font-black w-[75px]"></div></td>
-                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'audience', this.value)" class="w-full p-2 border rounded-xl text-[10px] font-bold bg-white">${window.AUDIENCES.map(o => `<option ${a.audience === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
+                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'audience', this.value)" class="w-full p-2 border rounded-xl text-[10px] font-bold bg-white cursor-pointer">${window.AUDIENCES.map(o => `<option ${a.audience === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
                                                 <td class="px-6 py-4"><input type="number" value="${a.publicCount || ''}" onblur="window.saveAct('${a.id}', 'publicCount', this.value)" class="w-full p-2 border rounded-xl text-center font-black text-slate-600"></td>
-                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'eventSector', this.value)" class="w-full p-2 border rounded-xl text-[10px] font-bold bg-white">${window.SECTORS.map(o => `<option ${a.eventSector === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
-                                                <td class="px-6 py-4"><textarea onblur="window.saveAct('${a.id}', 'postOccurrence', this.value)" class="w-full p-2 border rounded-xl text-[10px] h-12 leading-tight resize-none" placeholder="Palestras e Ações...">${a.postOccurrence || ''}</textarea></td>
-                                                <td class="px-6 py-4"><input type="number" value="${a.satisfaction || ''}" onblur="window.saveAct('${a.id}', 'satisfaction', this.value)" class="w-14 p-2 border rounded-xl text-center font-black text-blue-700">%</td>
+                                                <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'eventSector', this.value)" class="w-full p-2 border rounded-xl text-[10px] font-bold bg-white cursor-pointer">${window.SECTORS.map(o => `<option ${a.eventSector === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>
+                                                <td class="px-6 py-4"><textarea onblur="window.saveAct('${a.id}', 'postOccurrence', this.value)" class="w-full p-2 border rounded-xl text-[10px] h-12 leading-tight resize-none">${a.postOccurrence || ''}</textarea></td>
+                                                <td class="px-6 py-4"><div class="flex items-center gap-1 justify-center"><input type="number" value="${a.satisfaction || ''}" onblur="window.saveAct('${a.id}', 'satisfaction', this.value)" class="w-14 p-2 border rounded-xl text-center font-black text-blue-700">%</div></td>
                                                 <td class="px-6 py-4"><select onchange="window.saveAct('${a.id}', 'status', this.value)" class="w-full p-2 rounded-xl font-black text-[10px] uppercase border-none cursor-pointer ${a.status === 'Concluído' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">${window.STATUS.map(s => `<option ${a.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
                                                 <td class="px-6 py-4 text-right no-print"><button onclick="window.delActReq('${a.id}')" class="text-slate-300 hover:text-red-500 transition-all p-2 rounded-lg hover:bg-red-50"><i data-lucide="trash-2" size="18"></i></button></td>
-                                            </tr>`).join('')}
+                                            </tr>`}).join('')}
                                     </tbody>
                                 </table>
                             </div>
@@ -321,72 +349,31 @@
                         }).join('')}
                     </div>`;
             },
-            crisis: () => {
-                return `
-                    ${window.getStrategicIndicatorsHTML()}
-                    <div class="space-y-8 animate-fadeIn">
-                        <div class="bg-red-800 text-white p-8 rounded-[2rem] shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 no-print">
-                            <div><h2 class="text-2xl font-black uppercase flex items-center gap-3"><i data-lucide="shield-alert"></i> Riscos & Crises</h2><p class="text-red-200 text-[10px] font-black uppercase tracking-widest mt-2">Plano de Mitigação Institucional</p></div>
-                            <button onclick="window.addCrisis()" class="bg-white text-red-800 px-8 py-4 rounded-2xl font-black uppercase text-xs shadow-xl active:scale-95 transition">REGISTAR NOVO ALERTA</button>
-                        </div>
-                        <div class="grid gap-6">
-                            ${window.state.crises.map(c => `
-                                <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 relative print-break-inside-avoid">
-                                    <div class="absolute top-8 right-8 flex gap-3 no-print">
-                                        <button onclick="window.autoGenCrisis('${c.id}')" class="text-blue-600 hover:text-blue-800 transition flex items-center gap-1 text-[10px] font-black uppercase tracking-widest bg-blue-50 px-4 py-2 rounded-xl border border-blue-100">
-                                            <i data-lucide="sparkles" size="14"></i> Sugestão
-                                        </button>
-                                        <button onclick="window.delCrisisReq('${c.id}')" class="text-slate-200 hover:text-red-600 transition p-2"><i data-lucide="trash-2" size="20"></i></button>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-slate-50 pb-8">
-                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Data</label><input type="date" value="${c.date}" onchange="window.saveCrisis('${c.id}', 'date', this.value)" class="w-full border-none bg-slate-50 rounded-xl p-3 text-xs font-black"></div>
-                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Gravidade</label><select onchange="window.saveCrisis('${c.id}', 'riskLevel', this.value)" class="w-full border-none bg-slate-50 rounded-xl p-3 text-[10px] font-black text-red-700 uppercase cursor-pointer">
-                                            <option ${c.riskLevel==='Moderada'?'selected':''}>Moderada</option>
-                                            <option ${c.riskLevel==='Grave'?'selected':''}>Grave</option>
-                                            <option ${c.riskLevel==='Reputacional Extrema'?'selected':''}>Extrema</option>
-                                        </select></div>
-                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Setor Responsável</label><select onchange="window.saveCrisis('${c.id}', 'sector', this.value)" class="w-full border-none bg-slate-50 rounded-xl p-3 text-xs font-black uppercase cursor-pointer">
-                                            ${window.SECTORS.map(s => `<option ${c.sector === s ? 'selected' : ''}>${s}</option>`).join('')}
-                                        </select></div>
-                                        <div><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Responsável</label><input type="text" value="Vera Nascimento" readonly class="w-full border-none bg-slate-100/50 rounded-xl p-3 text-xs font-bold text-slate-400 cursor-not-allowed"></div>
-                                    </div>
-                                    <div class="p-6 bg-red-50 rounded-3xl border border-red-100/50"><label class="block text-[10px] font-black text-red-800 uppercase mb-4 tracking-widest">Plano de Ação Corretiva</label><textarea onblur="window.saveCrisis('${c.id}', 'correctiveAction', this.value)" class="w-full bg-white border-none rounded-2xl p-4 text-sm h-32 shadow-inner resize-none font-medium text-slate-700 leading-relaxed" placeholder="Descreva as medidas imediatas...">${c.correctiveAction || ''}</textarea></div>
-                                </div>`).join('')}
-                        </div>
-                    </div>`;
-            },
             reports: () => {
                 const m = window.MONTHS_DATA[window.state.selectedMonth];
-                const rep = window.state.monthlyReports[m.id] || { explanation: '', adherence: '100%', axis: '' };
-
+                const rep = window.state.monthlyReports[m.id] || { explanation: '', axis: '' };
                 return `
                     ${window.getStrategicIndicatorsHTML()}
                     <div class="space-y-8 animate-fadeIn max-w-5xl mx-auto">
                         <div class="flex flex-col md:flex-row justify-between items-center bg-white p-8 rounded-[2rem] border shadow-sm gap-6 no-print">
                             <div><h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter">Relatórios de Gestão</h2><p class="text-[10px] font-black text-blue-600 uppercase mt-1 tracking-widest">${m.name}</p></div>
-                            <button onclick="window.autoGenRep()" class="bg-blue-50 text-blue-700 px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition border border-blue-200 flex items-center gap-2"><i data-lucide="sparkles" size="14"></i> Sugestão Automática</button>
+                            <button onclick="window.autoGenRep()" class="bg-blue-50 text-blue-700 px-4 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-100 transition border border-blue-200 flex items-center gap-2"><i data-lucide="sparkles" size="14"></i> Sugestão Automática</button>
                         </div>
                         <div class="bg-white p-10 rounded-[2.5rem] border shadow-sm space-y-10">
-                            <div><h3 class="font-black text-slate-800 text-xs uppercase tracking-[0.2em] mb-6 border-b pb-4">1. Análise Executiva de Atividades</h3><textarea onblur="window.saveRep('${m.id}', 'explanation', this.value)" class="w-full bg-slate-50 border-none rounded-3xl p-8 h-64 text-sm leading-relaxed text-slate-700 shadow-inner font-medium focus:ring-2 focus:ring-blue-100 transition">${rep.explanation || ''}</textarea></div>
-                            <div><h3 class="font-black text-slate-800 text-xs uppercase tracking-[0.2em] mb-6 border-b pb-4 flex items-center gap-2"><i data-lucide="layout-grid" size="14"></i> 2. Eixo Transversal (Compliance, Socioambiental, Ética)</h3><textarea onblur="window.saveRep('${m.id}', 'axis', this.value)" class="w-full bg-emerald-50/50 border-none rounded-3xl p-8 h-48 text-sm leading-relaxed text-slate-700 shadow-inner font-medium focus:ring-2 focus:ring-emerald-100 transition">${rep.axis || ''}</textarea></div>
+                            <div><h3 class="font-black text-slate-800 text-xs uppercase mb-6 border-b pb-4">1. Análise Executiva de Atividades</h3><textarea onblur="window.saveRep('${m.id}', 'explanation', this.value)" class="w-full bg-slate-50 border-none rounded-3xl p-8 h-64 text-sm leading-relaxed text-slate-700 shadow-inner font-medium">${rep.explanation || ''}</textarea></div>
+                            <div><h3 class="font-black text-slate-800 text-xs uppercase mb-6 border-b pb-4 flex items-center gap-2"><i data-lucide="layout-grid" size="14"></i> 2. Eixo Transversal (Socioambiental, Ética, Endomarketing)</h3><textarea onblur="window.saveRep('${m.id}', 'axis', this.value)" class="w-full bg-emerald-50/50 border-none rounded-3xl p-8 h-48 text-sm leading-relaxed text-slate-700 shadow-inner font-medium">${rep.axis || ''}</textarea></div>
                         </div>
                     </div>`;
             }
         };
 
         // --- LÓGICA DE INTERAÇÃO ---
-
         window.changeView = (v) => { window.state.view = v; window.renderApp(); };
         window.changeMonth = (m) => { window.state.selectedMonth = m; window.renderApp(); };
         window.toggleMobileMenu = () => document.getElementById('mobile-menu')?.classList.toggle('hidden');
         window.closeModal = () => document.getElementById('modal-overlay')?.classList.add('hidden');
+        window.exportPDF = () => { setTimeout(() => { window.print(); }, 200); };
         
-        window.exportPDF = () => {
-            const loader = document.getElementById('initial-loader');
-            if (loader) loader.classList.add('hidden');
-            setTimeout(() => { window.print(); }, 300);
-        };
-
         window.openConfirm = (msg, cb) => {
             const m = document.getElementById('modal-overlay'), t = document.getElementById('modal-message'), b = document.getElementById('modal-confirm-btn');
             if(m && t && b) { t.innerText = msg; b.onclick = () => { cb(); window.closeModal(); }; m.classList.remove('hidden'); }
@@ -394,23 +381,19 @@
 
         window.addAct = async () => {
             if (!window.db) return;
-            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', publicCount: 0, date: '2026-02-06', time: '09:00', eventSector: 'Comunicação', postOccurrence: '', satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
+            const d = { month: window.state.selectedMonth, type: 'Evento Interno', eventName: '', audience: 'Interno', publicCount: 0, date: '2026-02-09', time: '09:00', eventSector: 'Comunicação', postOccurrence: '', satisfaction: 0, status: 'Planejado', createdAt: new Date().toISOString() };
             await addDoc(collection(window.db, 'artifacts', appId, 'public', 'data', 'activities'), d);
         };
         window.saveAct = async (id, f, v) => { if (window.db) await updateDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'activities', id), { [f]: v }); };
-        window.delActReq = (id) => window.openConfirm("Deseja eliminar esta ação?", () => deleteDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'activities', id)));
-
-        window.addCrisis = async () => { if (window.db) await addDoc(collection(window.db, 'artifacts', appId, 'public', 'data', 'crises'), { date: '2026-02-06', riskLevel: 'Moderada', sector: 'Comunicação', correctiveAction: '', createdAt: new Date().toISOString() }); };
-        window.saveCrisis = async (id, f, v) => { if (window.db) await updateDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'crises', id), { [f]: v }); };
-        window.delCrisisReq = (id) => window.openConfirm("Eliminar registo de risco?", () => deleteDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'crises', id)));
-
-        window.autoGenCrisis = (id) => {
-            window.saveCrisis(id, 'correctiveAction', "Reunião de alinhamento setorial realizada para reforço dos processos de conformidade institucional e segurança da informação.");
-        };
+        window.delActReq = (id) => window.openConfirm("Deseja eliminar este registo permanentemente?", () => deleteDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'activities', id)));
 
         window.sendNotif = async () => {
             const i = document.getElementById('notif-input');
-            if(i?.value.trim()) { await addDoc(collection(window.db, 'artifacts', appId, 'public', 'data', 'notifications'), { text: i.value, timestamp: new Date().toISOString(), author: 'Admin' }); i.value = ''; }
+            const c = document.getElementById('notif-cat');
+            if(i?.value.trim()) { 
+                await addDoc(collection(window.db, 'artifacts', appId, 'public', 'data', 'notifications'), { text: i.value, category: c.value, timestamp: new Date().toISOString(), author: 'Admin' }); 
+                i.value = ''; 
+            }
         };
         window.delNotif = async (id) => await deleteDoc(doc(window.db, 'artifacts', appId, 'public', 'data', 'notifications', id));
 
@@ -418,42 +401,26 @@
         
         window.autoGenRep = () => {
             const acts = window.state.activities.filter(a => parseInt(a.month) === window.state.selectedMonth);
-            const done = acts.filter(a => a.status === 'Concluído' || a.status === 'Realizado').length;
+            const done = acts.filter(a => a.status === 'Concluído').length;
             const mName = window.MONTHS_DATA[window.state.selectedMonth].name.toUpperCase();
-            let txt = `RELATÓRIO MENSAL - ${mName} 2026\n\nNo período de apuração, o Setor de Comunicação executou ${acts.length} ações estratégicas. Foram atingidas ${done} metas previstas. `;
-            if(window.state.selectedMonth === 0) txt += "Destaque para o 'Janeiro Branco - CGA-2026', com 41 participantes e 91% de satisfação média.";
+            let txt = `RELATÓRIO MENSAL - ${mName} 2026\n\nExecução de ${acts.length} ações coordenadas pelo Setor de Comunicação. `;
+            if(window.state.selectedMonth === 0) txt += "Destaque para o 'Janeiro Branco - CGA-2026' com 91% de satisfação média.";
             window.saveRep(window.state.selectedMonth, 'explanation', txt);
-            window.saveRep(window.state.selectedMonth, 'axis', "Atividades integradas com eixos de Compliance, Socioambiental e Ética.");
+            window.saveRep(window.state.selectedMonth, 'axis', "Ações em plena conformidade com os eixos de Socioambiental, Ética e Endomarketing institucional.");
         };
 
-        // --- MOTOR DE RENDERIZAÇÃO ---
-        window.renderApp = () => {
-            const content = document.getElementById('app-content');
-            if(!content) return;
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                const isActive = btn.dataset.view === window.state.view;
-                btn.className = `nav-btn px-5 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all ${isActive ? 'nav-btn-active' : 'nav-btn-inactive'}`;
-            });
-
-            let mSelector = '';
-            if (['month', 'reports'].includes(window.state.view)) {
-                mSelector = `<div class="mb-6 overflow-x-auto pb-2 no-print custom-scrollbar"><div class="flex gap-2 min-w-max">${window.MONTHS_DATA.map(m => `<button onclick="window.changeMonth(${m.id})" class="px-4 py-2 rounded-full text-[10px] font-black border transition-all ${window.state.selectedMonth === m.id ? 'bg-blue-900 text-white border-blue-900 shadow-lg' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'} uppercase tracking-tight">${m.name}</button>`).join('')}</div></div>`;
-            }
-
-            const template = window.templates[window.state.view];
-            if(template) content.innerHTML = mSelector + template();
-            lucide.createIcons();
-            document.getElementById('initial-loader')?.classList.add('hidden');
-        };
-
-        async function populateData() {
-            const snap = await getDocs(collection(window.db, 'artifacts', appId, 'public', 'data', 'activities'));
+        // --- POPULAÇÃO INICIAL (PDF + DOCX) ---
+        async function populateDatabase() {
+            if (!window.db) return;
+            const actsCol = collection(window.db, 'artifacts', appId, 'public', 'data', 'activities');
+            const snap = await getDocs(actsCol);
             if (snap.empty) {
-                await addDoc(collection(window.db, 'artifacts', appId, 'public', 'data', 'activities'), {
-                    month: 0, type: 'Evento Interno', eventName: 'Janeiro Branco - CGA-2026', audience: 'Interno', publicCount: 41, eventSector: 'CGA',
-                    date: '2026-01-27', time: '08:36', postOccurrence: 'NPS: 65.8. Palestras sobre saúde mental e ética.', satisfaction: 91, status: 'Concluído', createdAt: new Date().toISOString()
-                });
+                const schedule = [
+                    { month: 0, type: 'Gravação', eventName: 'Websérie - Keilah Fonseca', audience: 'Externo', publicCount: 10, eventSector: 'CCSRI', date: '2026-01-16', postOccurrence: 'Gravação concluída.', satisfaction: 100, status: 'Concluído' },
+                    { month: 0, type: 'Evento Interno', eventName: 'Janeiro Branco - CGA-2026', audience: 'Interno', publicCount: 41, eventSector: 'CGA', date: '2026-01-27', postOccurrence: 'NPS: 65.8. Palestras sobre saúde mental e ética.', satisfaction: 91, status: 'Concluído' },
+                    { month: 0, type: 'Palestra', eventName: 'Dia Mundial da Cultura Africana', audience: 'Comunidade', publicCount: 30, eventSector: 'CCSRI', date: '2026-01-23', postOccurrence: 'Palestra Keila Quilombo.', satisfaction: 95, status: 'Concluído' }
+                ];
+                for (const item of schedule) { await addDoc(actsCol, { ...item, createdAt: new Date().toISOString() }); }
             }
         }
 
@@ -461,29 +428,41 @@
             const app = initializeApp(firebaseConfig);
             window.auth = getAuth(app); 
             window.db = getFirestore(app);
-
             const printDate = document.getElementById('print-date');
             if(printDate) printDate.innerText = new Date().toLocaleDateString();
-
+            
             try {
                 await signInAnonymously(window.auth);
-                onAuthStateChanged(window.auth, (u) => {
+                onAuthStateChanged(window.auth, async (u) => {
                     if (u) {
                         const dot = document.getElementById('conn-dot'), txt = document.getElementById('conn-text');
                         if(dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
                         if(txt) txt.innerText = "ONLINE";
-                        populateData();
-                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'activities'), s => { window.state.activities = s.docs.map(d => ({id: d.id, ...d.data()})); window.renderApp(); });
-                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'crises'), s => { window.state.crises = s.docs.map(d => ({id: d.id, ...d.data()})); window.renderApp(); });
-                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'notifications'), s => { window.state.notifications = s.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)); window.renderApp(); });
-                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'reports'), s => { const r = {}; s.docs.forEach(d => r[d.id] = d.data()); window.state.monthlyReports = r; window.renderApp(); });
+                        
+                        await populateDatabase();
+                        
+                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'activities'), s => { 
+                            window.state.activities = s.docs.map(d => ({id: d.id, ...d.data()})); 
+                            window.renderApp(); 
+                        });
+                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'notifications'), s => { 
+                            window.state.notifications = s.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)); 
+                            window.renderApp(); 
+                        });
+                        onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'reports'), s => { 
+                            const r = {}; s.docs.forEach(d => r[d.id] = d.data()); 
+                            window.state.monthlyReports = r; 
+                            window.renderApp(); 
+                        });
                     }
                 });
             } catch (e) { window.renderApp(); }
         }
+        
         start();
     </script>
 </body>
 </html>
+
 
 
